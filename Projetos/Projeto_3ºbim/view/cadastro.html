@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+
+    <style>
+       body {
+        zoom: 100%;
+        background: url(../fotofundo.jpg) no-repeat center center/cover;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        #divResposta {
+            width: 400px;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .input_container {
+            width: 90%;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input_container input {
+            width: 100%;
+            padding: 15px 20px;
+            background: #f2f2f2;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .select select   {
+            width: 100%;
+            padding: 15px 20px;
+            background: #f2f2f2;
+            border: 1px solid #ccc;
+
+            border-radius: 40px;
+            font-size: 16px;
+            box-sizing: border-box;
+
+        }
+      
+
+        .remenber_forget {
+            margin-top: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .remenber_forget a {
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+
+        }
+
+        .remenber_forget a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #333;
+            border: none;
+            border-radius: 40px;
+            font-size: 20px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        .register {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register p {
+            color: #333;
+            font-size: 14px;
+        }
+
+        .register a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register a:hover {
+            text-decoration: underline;
+        }
+
+        
+        .text-danger {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        small{
+            margin-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="divResposta">
+        <h1>Criar Conta</h1>
+        <div class="input_container">
+            <input type="text" id="txtNome" placeholder="Nome">
+        </div>
+        <div class="input_container">
+            <input type="email" id="txtEmail" placeholder="Email">
+        </div>
+        <div class="input_container">
+            <input type="password" id="txtSenha" placeholder="Senha">
+        </div>
+        
+        <div class="input_container">
+            <input type="text" id="txtIdade" placeholder="Idade">
+        </div>
+        <div class="input_container">
+            
+            <input type="date" id="dataDate" placeholder="Date">
+            <small>// Selecione a data para o seu encontro.</small>
+
+        </div>
+        <div class="col-md-12 select">
+            <select class="form-select" id="idCategoria_categoria" required="">
+                <option selected="" disabled="" value="">Categoria</option>
+                <!--so vai aparaecer as opcoes apos o get -->
+            </select>
+        </div>
+     
+        <div class="remenber_forget">
+            <a href="alterarSenha.html">Esqueceu a senha?</a>
+        </div>
+        <button id="bntCadastrar">Clique aqui</button>
+        <div id="error-messageUsuarioCreate" class="text-danger" style="display: none;"></div>
+
+        <div class="register">
+            <p>Ja é registrado? <a href="login.html">Registre-se</a></p>
+        </div>
+        <div class="register">
+            <p>Deseja cadastrar por meio de arquivo de textos? <a href="arquivocsv.html">Cadastrar-se</a></p>
+        </div>
+    </div>
+</body>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const uri_categorias = '/usuarios/categorias/readAll';
+        fetch(uri_categorias, {
+                method: "GET"
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                const selectCategoria = document.getElementById('idCategoria_categoria');
+                // Limpa as opções existentes (exceto a padrão)
+                selectCategoria.innerHTML = '<option selected="" disabled="" value="">Categoria</option>';
+
+                // Itera sobre os dados retornados e cria opções para o <select>
+                data.categoria.forEach(valor_categoria => {
+                    const optionCreate = document.createElement('option');
+                    optionCreate.value = valor_categoria.idCategoria; // Define o valor da opção
+                    optionCreate.textContent = valor_categoria.nomeCategoria; // Define o texto da opção
+                    selectCategoria.appendChild(optionCreate); // Adiciona a opção ao <select>
+
+                });
+
+            }).catch((error) => {
+                console.log("Error ao buscar categorias:", error);
+            });
+        });
+        
+
+    const divResposta = document.getElementById("divResposta")
+    const txtNome = document.getElementById("txtNome");
+    const txtEmail = document.getElementById("txtEmail");
+    const txtSenha = document.getElementById("txtSenha");
+    const txtIdade = document.getElementById("txtIdade");
+    const dataDate = document.getElementById("dataDate");
+    const idCategoria = document.getElementById("idCategoria_categoria");
+
+    const messageCreate = document.getElementById('error-messageUsuarioCreate')
+
+    const bntCadastrar = document.getElementById("bntCadastrar");
+
+
+    bntCadastrar.onclick = function (){
+        cadastrar ();
+    }
+ function cadastrar (){
+    let nome = txtNome.value;
+    let email = txtEmail.value;
+    let senha = txtSenha.value;
+    let idade = txtIdade.value;
+    let data = dataDate.value;
+    let categoria = idCategoria.value ;
+    console.log(categoria)
+    console.log(data)
+
+    
+    const jsonEnvio = {
+        "nomeUsuario":nome,
+        "emailUsuario":email,
+        "senhaUsuario":senha,
+        "idade":idade,
+        "idCategoria":categoria,
+        "dataDate" : data
+    }
+
+    let uri = '/usuarios';
+    fetch(uri, {
+        method: "POST",
+        body: JSON.stringify(jsonEnvio)
+    }).then((response) => {
+        return response.text();
+    }).then((data) => {
+        console.log(data)
+        processarResultados(data)
+    }).catch((error) => {
+        console.error("Error:", error);
+
+    });
+
+    function processarResultados (texto_json){ 
+        const json = JSON.parse(texto_json)
+        if (!nome || !email || !senha || !idade || !data || !categoria ){
+            let text = "Preencha todos os campos!"
+            messageCreate.textContent = text
+            messageCreate.style.display = "block";
+             
+        }else  if (json.status == false){
+            let text = "Falha ao cadastrar!"
+            messageCreate.textContent = text
+            messageCreate.style.display = "block"; 
+
+        }else{
+            localStorage.setItem("dados",texto_json);
+            window.location = 'login.html'
+        }
+    }
+
+}
+</script>
+</html>

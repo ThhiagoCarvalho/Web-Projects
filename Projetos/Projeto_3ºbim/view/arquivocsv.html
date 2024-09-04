@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro CSV</title>
+
+    <style>
+        body {
+            background: url(../fotofundo.jpg) no-repeat center center/cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        #divResposta {
+            width: 400px;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .input_container {
+            width: 100%;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input_container input {
+            width: 100%;
+            padding: 15px 20px;
+            background: #f2f2f2;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+
+
+
+        .remenber_forget {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .remenber_forget a {
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+
+        }
+
+        .remenber_forget a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            margin-top: 30px;
+            width: 100%;
+            padding: 15px;
+            background: #333;
+            border: none;
+            border-radius: 40px;
+            font-size: 20px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .select select {
+            width: 100%;
+            padding: 15px 20px;
+            background: #f2f2f2;
+            border: 1px solid #ccc;
+
+            border-radius: 40px;
+            font-size: 16px;
+            box-sizing: border-box;
+
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        .register {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register p {
+            color: #333;
+            font-size: 14px;
+        }
+
+        .register a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="divResposta">
+        <h1>Criar diversas contas</h1>
+        <div class="input_container">
+            <input type="file" id="txtArquivo" placeholder="Arquivo">
+        </div>
+        <div class="col-md-12 select">
+
+            <select class="form-select" id="idTabela" required="">
+                <option selected disabled value="">Selecione uma tabela</option>
+                <option value="1">Usuario</option>
+                <option value="2">Categoria</option>
+                <option value="3">Opcao</option>
+            </select>
+
+        </div>
+
+        <button id="bntCadastrar">Clique aqui</button>
+        <div class="register">
+            <p>Deseja cadastrar de outra forma ? <a href="cadastro.html">Clique aqui</a></p>
+        </div>
+    </div>
+</body>
+
+
+<script>
+
+    const divResposta = document.getElementById("divResposta")
+    const txtArquivo = document.getElementById("txtArquivo");
+    const cboTabela = document.getElementById("idTabela");
+    const optionCreate = document.createElement('option');
+
+    const bntCadastrar = document.getElementById("bntCadastrar");
+
+
+    bntCadastrar.onclick = function () {
+        cadastrarCSV();
+    }
+
+    function cadastrarCSV() {
+        let arquivo = txtArquivo.files[0];
+        let idTabela = cboTabela.value;
+
+        var data = new FormData()
+        data.append('variavelArquivo', arquivo)
+        data.append('tabela', idTabela)
+
+        if (idTabela == 1) {
+  
+            let uri = '/usuarios/csv/';
+            fetch(uri, {
+                method: "POST",
+                body: data
+            }).then((response) => {
+                return response.text();
+            }).then((data) => {
+                console.log("RESPOSTA >> "+data)
+                processarResultados(data)
+            }).catch((error) => {
+                console.error("Error:", error);
+            });
+
+            function processarResultados(texto_json) {
+                const json = JSON.parse(texto_json)
+
+                if (json.status == false) {
+                    msg = 'Usuario ou senha invalido'
+                    p.textContent(msg);
+                    divResposta.appendChild(p)
+                } else {
+                    localStorage.setItem("dados", texto_json);
+                    window.location.href = 'login.html'
+                }
+            }
+
+        }else if (idTabela == 2) {
+            let uri = '/categorias/csv';
+            fetch(uri, {
+                method: "POST",
+                body: data
+            }).then((response) => {
+                return response.text();
+            }).then((data) => {
+                console.log("RESPOSTA >> "+data)
+                processarResultados(data)
+            }).catch((error) => {
+                console.error("Error:", error);
+            });
+
+            function processarResultados(texto_json) {
+                const json = JSON.parse(texto_json)
+
+                if (json.status == false) {
+                    msg = 'Erro ao cadastrar'
+                    p.textContent(msg);
+                    divResposta.appendChild(p)
+                } else {
+                    localStorage.setItem("dados", texto_json);
+                    window.location.href = 'login.html'
+                }
+            }
+
+        }else if (idTabela == 3) {
+            let uri = '/opcao/csv';
+            fetch(uri, {
+                method: "POST",
+                body: data
+            }).then((response) => {
+                return response.text();
+            }).then((data) => {
+                console.log("RESPOSTA >> "+data)
+                processarResultados(data)
+            }).catch((error) => {
+                console.error("Error:", error);
+            });
+
+            function processarResultados(texto_json) {
+                const json = JSON.parse(texto_json)
+
+                if (json.status == false) {
+                    msg = 'Erro ao cadastrar'
+                    p.textContent(msg);
+                    divResposta.appendChild(p)
+                } else {
+                    localStorage.setItem("dados", texto_json);
+                    window.location.href = 'login.html'
+                }
+            }
+        }
+    }
+</script>
+
+</html>

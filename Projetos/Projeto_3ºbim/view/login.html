@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <style>
+       body {
+        zoom: 100%;
+
+            background: url(../fotofundo.jpg) no-repeat center center/cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        #divResposta {
+            width: 400px;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .input_container {
+            width: 100%;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input_container input {
+            width: 100%;
+            padding: 15px 20px;
+            background: #f2f2f2;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+    
+      
+
+        .remenber_forget {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .remenber_forget a {
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+
+        }
+
+        .remenber_forget a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #333;
+            border: none;
+            border-radius: 40px;
+            font-size: 20px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        .register {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register p {
+            color: #333;
+            font-size: 14px;
+        }
+
+        .register a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register a:hover {
+            text-decoration: underline;
+        }
+
+        .input_container input.error {
+            background-color: #f8d7da;
+            border-style: outset;
+            border-color: #f5c6cb;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="divResposta">
+        <h1>Login</h1>
+       
+        <div class="input_container">
+            <input type="email" id="txtEmail" placeholder="Email">
+        </div>
+        <div class="input_container">
+            <input type="password" id="txtSenha" placeholder="Senha">
+        </div>
+     
+        <div class="remenber_forget">
+            <a href="alterarSenha.html">Esqueceu a senha?</a>
+        </div>
+        <button id="bntCadastrar">Clique aqui</button>
+        <div class="register">
+            <p>Não é registrado ainda? <a href="cadastro.html">Cadastra-se</a></p>
+        </div>
+    </div>
+</body>
+
+
+<script>
+
+const divResposta = document.getElementById("divResposta")
+const txtEmail = document.getElementById("txtEmail");
+const txtSenha = document.getElementById("txtSenha");
+
+const bntCadastrar = document.getElementById("bntCadastrar");
+const p = document.createElement('p');
+
+bntCadastrar.onclick = function (){
+    login ();
+}
+ function login (){
+    const email = txtEmail.value;
+    const senha = txtSenha.value;
+
+    const jsonEnvio = {
+        "emailUsuario":email,
+        "senha":senha,
+    }
+
+    let uri = '/logar';
+    fetch(uri, {
+        method: "POST",
+        body: JSON.stringify(jsonEnvio)
+    }).then((response) => {
+        return response.text();
+    }).then((data) => {
+        console.log(data)
+        processarResultados(data)
+        
+    }).catch((error) => {
+        console.log( error);
+    });
+
+    function processarResultados (texto_json){ 
+        const json = JSON.parse(texto_json)
+
+        if (json.status == false){
+
+            txtEmail.value = "";
+            txtSenha.value = "";
+
+            txtEmail.classList.add("error");
+            txtSenha.classList.add("error");
+
+            txtEmail.placeholder = "Email invalido!";
+            txtSenha.placeholder = "Senhas invalido!";
+
+            return; // Para de executar se as senhas não forem iguais
+        } else {
+            txtEmail.classList.remove("error");
+            txtSenha.classList.remove("error");
+
+            localStorage.setItem("dados",texto_json);
+            window.location.href= 'site.html'
+        }
+    }
+}
+
+</script>
+</html>

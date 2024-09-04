@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .tabelaResposta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: wrap;
+            margin-top: 20px;
+
+        }
+    </style>
+</head>
+
+
+<body>
+    
+</body>
+
+<script>
+function get_opcao(){
+    uri_get_opcao = '/ReadAll'
+   
+    fetch(uri, {
+            method: "GET",
+            body: JSON.stringify(jsonEnvio),
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            montarTabelaOpcao (data)
+        }).catch((error) => {
+            console.error("Error:", error);
+        });
+
+
+}
+
+function montarTabelaOpcao($objJson){
+    const tabelaOpcap = document.createElement('table')
+    const thead = document.createElement("thead");
+    const tbody=document.createElement("tbody");
+    objJson.forEach(objJson_get => {
+        const linhaTabela = document.createElement('tr')
+        objJson_get.dados.forEach(dados_get =>{
+            const colunaTabela = document.createElement('td')
+            colunaTabela.append(objJson_get.dados)
+
+       });
+       linhaTabela.appendChild(colunaTabela)
+       tabelaOpcap.appendChild(linhaTabela)
+    });
+
+
+}
+</script>
+</html>
