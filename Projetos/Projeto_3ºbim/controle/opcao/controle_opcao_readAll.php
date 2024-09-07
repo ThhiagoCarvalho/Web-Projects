@@ -15,10 +15,10 @@ try{
 
         $objOpcao = new Opcao();
         $objOpcao->setIdCategoria($parametro_escolhido);
-        if ($objOpcao->readAll()==true){
+        if ($objOpcao->readId()==true){
             $objResposta->status = true;
             $objResposta->msg = 'executado com sucesso!';
-            $objResposta->dados = $objOpcao->readAll();    
+            $objResposta->dados = $objOpcao->readId();    
             
         }else{
             $objResposta->status = false;

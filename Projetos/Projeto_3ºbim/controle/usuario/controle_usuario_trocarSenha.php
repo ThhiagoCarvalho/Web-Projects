@@ -23,7 +23,6 @@ try{
             $objResposta->status = false;
             $objResposta->msg = 'erro ao trocar';
         }
-    
     }else {
          $objResposta->status = false;
             $objResposta->msg = 'email invalido';

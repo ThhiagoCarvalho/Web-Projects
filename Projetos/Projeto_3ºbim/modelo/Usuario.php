@@ -60,7 +60,6 @@ public function verficarUsuarioSenha () {
 
 public function verificarEmail () {
     $conexao = Banco::getConexao();
-
     $sql =  "SELECT count(*) AS qtd, emailUsuario FROM usuario WHERE emailUsuario = ?   GROUP BY emailusuario";
 
     $prepararsql = $conexao->prepare($sql);
@@ -68,6 +67,7 @@ public function verificarEmail () {
     $prepararsql ->execute();
     $matriz = $prepararsql -> get_result();
     $objTupla = $matriz -> fetch_object();
+
     return $objTupla->qtd > 0;  
 }
 
@@ -96,7 +96,7 @@ public function create (){
 public function createFromCsv (){
     $conexao = Banco::getConexao() ;
     $this->senhaUsuario = md5($this->senhaUsuario);
-
+   
     $sql = "insert into usuario (nomeUsuario,emailUsuario,senhaUsuario,idade,dataDate,Categoria_idCategoria) values (?,?,?,?,?,?)";
     $prepararsql = $conexao->prepare($sql);
     if (!$prepararsql) {
@@ -104,9 +104,7 @@ public function createFromCsv (){
     }
     $prepararsql->bind_param("sssisi",$this->nomeUsuario,$this->emailUsuario,$this->senhaUsuario,$this->idade,$this->dataDate,$this->categoria_idCategoria);
     $executou = $prepararsql->execute();
-    if (!$executou) {
-        throw new Exception("Erro ao executar a consulta SQL");
-    }
+   
     $idCadastrado = $conexao->insert_id;
     $this->setIdUsuario($idCadastrado);
     return $executou;    
@@ -158,7 +156,6 @@ public function update (){
 
 public function updateSenha (){
     $conexao = Banco::getConexao() ;
-    $this->senhaUsuario = md5($this->senhaUsuario);
 
     $sql = "update usuario set senhaUsuario = md5(?)  where emailUsuario = ?";
     $prepararsql = $conexao->prepare($sql);

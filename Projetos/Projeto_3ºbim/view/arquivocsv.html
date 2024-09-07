@@ -117,6 +117,12 @@
         .register a:hover {
             text-decoration: underline;
         }
+
+        .text-danger {
+            color: red;
+            margin-top: 20px;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -138,6 +144,9 @@
         </div>
 
         <button id="bntCadastrar">Clique aqui</button>
+
+        <div id="error-messageUsuarioCreateCSV" class="text-danger" style="display: none;"></div>
+
         <div class="register">
             <p>Deseja cadastrar de outra forma ? <a href="cadastro.html">Clique aqui</a></p>
         </div>
@@ -153,7 +162,7 @@
     const optionCreate = document.createElement('option');
 
     const bntCadastrar = document.getElementById("bntCadastrar");
-
+    const messageCreateCSV = document.getElementById("error-messageUsuarioCreateCSV")
 
     bntCadastrar.onclick = function () {
         cadastrarCSV();
@@ -185,14 +194,21 @@
             function processarResultados(texto_json) {
                 const json = JSON.parse(texto_json)
 
-                if (json.status == false) {
-                    msg = 'Usuario ou senha invalido'
-                    p.textContent(msg);
-                    divResposta.appendChild(p)
-                } else {
+                if (json.status == false && json.codigo == 1) {
+                    let text = json.msg;
+                    messageCreateCSV.textContent = text
+                    messageCreateCSV.style.display = "block";
+
+                }else if (json.status == true && json.codigo == 2) {
+                    let text = json.msg;
+                    messageCreateCSV.textContent = text
+                    messageCreateCSV.style.display = "block";
+
+                } else if (json.status == true && json.codigo == 3) { 
                     localStorage.setItem("dados", texto_json);
                     window.location.href = 'login.html'
                 }
+
             }
 
         }else if (idTabela == 2) {
@@ -211,19 +227,25 @@
 
             function processarResultados(texto_json) {
                 const json = JSON.parse(texto_json)
+            
+                if (json.status == false && json.codigo == 1) {
+                    let text = json.msg;
+                    messageCreateCSV.textContent = text
+                    messageCreateCSV.style.display = "block";
 
-                if (json.status == false) {
-                    msg = 'Erro ao cadastrar'
-                    p.textContent(msg);
-                    divResposta.appendChild(p)
-                } else {
-                    localStorage.setItem("dados", texto_json);
-                    window.location.href = 'login.html'
+                }else if (json.status == true && json.codigo == 2) {
+                    let text = json.msg;
+                    messageCreateCSV.textContent = text
+                    messageCreateCSV.style.display = "block";
+
+                } else if (json.status == true && json.codigo == 3) { 
+                    bntCadastrar.textContent = 'feito'
                 }
+            
             }
 
         }else if (idTabela == 3) {
-            let uri = '/opcao/csv';
+            let uri = '/opcoes/csv';
             fetch(uri, {
                 method: "POST",
                 body: data
@@ -239,13 +261,18 @@
             function processarResultados(texto_json) {
                 const json = JSON.parse(texto_json)
 
-                if (json.status == false) {
-                    msg = 'Erro ao cadastrar'
-                    p.textContent(msg);
-                    divResposta.appendChild(p)
-                } else {
-                    localStorage.setItem("dados", texto_json);
-                    window.location.href = 'login.html'
+                if (json.status == false && json.codigo == 1) {
+                    let text = json.msg;
+                    messageCreateCSV.textContent = text
+                    messageCreateCSV.style.display = "block";
+
+                }else if (json.status == true && json.codigo == 2) {
+                    let text = json.msg;
+                    messageCreateCSV.textContent = text
+                    messageCreateCSV.style.display = "block";
+
+                } else if (json.status == true && json.codigo == 3) { 
+                    bntCadastrar.textContent = 'feito'
                 }
             }
         }

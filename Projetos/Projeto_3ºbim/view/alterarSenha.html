@@ -114,7 +114,7 @@
         <div class="input_container">
             <input type="password" id="txtVerificarSenha" placeholder="Senha novamente">
         </div>
-        <button id="bntCadastrar">Clique aqui</button>
+        <button id="btnAlterarSenha">Clique aqui</button>
         <div class="register">
             <p>Lembrou do login? <a href="login.html">Registre-se</a></p>
         </div>
@@ -133,10 +133,10 @@ const txtSenha = document.getElementById("txtSenha");
 const txtVerificarSenha = document.getElementById("txtVerificarSenha");
 const messageSenha = document.getElementById('error-messageUsuarioCreate')
 
-const bntCadastrar = document.getElementById("bntCadastrar");
+const btnAlterarSenha = document.getElementById("btnAlterarSenha");
 
 
-bntCadastrar.onclick = function (){
+btnAlterarSenha.onclick = function (){
     alterarSenha ();
 }
  function alterarSenha (){
@@ -190,7 +190,7 @@ bntCadastrar.onclick = function (){
             return
         }else if (json.status == true){
             localStorage.setItem("dados",texto_json);
-            window.location.href = 'site.html'
+            window.location.href = 'login.html'
         }
     }
 }

@@ -35,6 +35,11 @@ try{
         }else if ($objOpcao->getIdCategoria()==''){
             $objResposta->status = false;
             $objResposta->msg = "nao foi identificado o tipo da categoria da opcao!";
+            
+        }else if ($objOpcao->verificarOpcao() == true) {
+            $objResposta->cod =  1;
+            $objResposta->status = false;
+            $objResposta->msg = "Essa opção já existe";
 
         }else if ($objOpcao->create()== true){
             $objResposta->status = true;

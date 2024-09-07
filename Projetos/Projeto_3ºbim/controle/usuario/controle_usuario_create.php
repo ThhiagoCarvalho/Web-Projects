@@ -20,9 +20,14 @@ $objUsuario->setCategoriaID($objJson->idCategoria);
 
 try{
 
+
     if ($objUsuario->getNomeUsuario()==''){
         $objResposta->status =  false;
         $objResposta->msg = 'Nome esta em branco!';
+    } else  if ($objUsuario->verificarEmail()== true){
+        $objResposta->cod =  1;
+        $objResposta->status =  false;
+        $objResposta->msg = 'Este email ja esta cadastrado!';
 
     }else if (strlen($objUsuario->getNomeUsuario())  < 4){
         $objResposta->status =  false;

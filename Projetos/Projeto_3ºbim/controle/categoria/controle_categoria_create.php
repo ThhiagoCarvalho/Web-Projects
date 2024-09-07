@@ -26,6 +26,11 @@ try{
             $objResposta->status = false;
             $objResposta->msg = 'nome muito curto';
 
+        }else if ($objCategoria->verificarCategoria() == true) {
+            $objResposta->cod =  1;
+            $objResposta->status = false;
+            $objResposta->msg = "Essa categoria já existe";
+
         }else if ($objCategoria->create()== true){
             $objResposta->status=true;
             $objResposta->msg = 'sucesso!';

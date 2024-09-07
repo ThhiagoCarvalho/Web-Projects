@@ -165,7 +165,7 @@
         <div id="error-messageUsuarioCreate" class="text-danger" style="display: none;"></div>
 
         <div class="register">
-            <p>Ja é registrado? <a href="login.html">Registre-se</a></p>
+            <p>Ja é registrado? <a href="login.html">Login</a></p>
         </div>
         <div class="register">
             <p>Deseja cadastrar por meio de arquivo de textos? <a href="arquivocsv.html">Cadastrar-se</a></p>
@@ -176,7 +176,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const uri_categorias = '/usuarios/categorias/readAll';
+        const uri_categorias = '/usuarios/categorias/';
         fetch(uri_categorias, {
                 method: "GET"
             }).then((response) => {
@@ -192,9 +192,7 @@
                     optionCreate.value = valor_categoria.idCategoria; // Define o valor da opção
                     optionCreate.textContent = valor_categoria.nomeCategoria; // Define o texto da opção
                     selectCategoria.appendChild(optionCreate); // Adiciona a opção ao <select>
-
                 });
-
             }).catch((error) => {
                 console.log("Error ao buscar categorias:", error);
             });
@@ -224,8 +222,6 @@
     let idade = txtIdade.value;
     let data = dataDate.value;
     let categoria = idCategoria.value ;
-    console.log(categoria)
-    console.log(data)
 
     
     const jsonEnvio = {
@@ -257,12 +253,17 @@
             let text = "Preencha todos os campos!"
             messageCreate.textContent = text
             messageCreate.style.display = "block";
-             
-        }else  if (json.status == false){
-            let text = "Falha ao cadastrar!"
+            
+        }else  if (json.status == false && json.cod == 1){
+            let text = "Este email ja esta cadastrado!"
             messageCreate.textContent = text
             messageCreate.style.display = "block"; 
 
+        }else  if (json.status == false ){
+            let text = "Falha ao cadastrar!"
+            messageCreate.textContent = text
+            messageCreate.style.display = "block"; 
+        
         }else{
             localStorage.setItem("dados",texto_json);
             window.location = 'login.html'

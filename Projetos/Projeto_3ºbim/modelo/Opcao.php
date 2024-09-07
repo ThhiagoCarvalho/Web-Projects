@@ -47,6 +47,20 @@ class Opcao implements JsonSerializable{
 
     }
 
+    public function verificarOpcao () {
+        $conexao = Banco::getConexao();
+    
+        $sql =  "SELECT count(*) AS qtd, nomeOpcao FROM opcoes WHERE nomeOpcao = ?   GROUP BY nomeOpcao";
+    
+        $prepararsql = $conexao->prepare($sql);
+        $prepararsql->bind_param("s", $this->nomeOpcao);
+        $prepararsql ->execute();
+        $matriz = $prepararsql -> get_result();
+        $objTupla = $matriz -> fetch_object();
+        return $objTupla->qtd > 0;  
+    }
+
+
     public function createFromCsv (){
         $conexao = Banco::getConexao();
         $sql = "insert into opcoes (nomeOpcao,localizacaoOpcao,horarioFucionamento,custoEstimado,Categoria_idCategoria,descricao) values (?,?,?,?,?,?)";
@@ -89,7 +103,7 @@ class Opcao implements JsonSerializable{
 
     }
 
-    public function readAll (){
+    public function readId (){
         $conexao = Banco::getConexao();
         $sql = "SELECT opcoes.nomeOpcao, opcoes.descricao, opcoes.horarioFucionamento,opcoes.localizacaoOpcao,idOpcoes, custoEstimado FROM opcoes JOIN categoria ON categoria.idCategoria = opcoes.Categoria_idCategoria WHERE categoria.idCategoria = ?; ";
         $prepararSql = $conexao->prepare($sql);
@@ -101,6 +115,20 @@ class Opcao implements JsonSerializable{
         return $matrizTuplas;
 
     }
+
+    public function readNome (){
+        $conexao = Banco::getConexao();
+        $sql = "SELECT * from opcoes where nomeOpcao = ? ";
+        $prepararSql = $conexao->prepare($sql);
+        $prepararSql-> bind_param("s",$this->nomeOpcao);
+
+        $prepararSql->execute();
+        $matriz = $prepararSql->get_result();
+        $matrizTuplas = $matriz ->fetch_all(MYSQLI_ASSOC);
+        return $matrizTuplas;
+
+    }
+
 
     public function readByPage ($pagina){
         $itensPagina = 5;

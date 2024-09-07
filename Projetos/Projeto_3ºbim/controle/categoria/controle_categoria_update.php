@@ -6,7 +6,7 @@ require_once("modelo/Categoria.php");
 require_once("modelo/MeuTokenJWT.php");
 
 $texto = file_get_contents("php://input");
-$objJson = json_decode($texto) or die ('{"msg: formato incrroto"}');
+$objJson = json_decode($texto) or die ('{"msg: formato incorreto"}');
 
 $objResposta = new stdClass();
 $objToken = new MeuTokenJWT();
@@ -15,9 +15,11 @@ $headers = apache_request_headers();
 
 try{
     if ($objToken->validarToken($headers['Authorization']) == true){
+
         $objCategoria = new Categoria();
         $objCategoria->setNomeCategoria($objJson->nomeCategoria);
         $objCategoria->setIdCategoria($parametro_IdCategoria);
+        
         if ($objCategoria->getNomeCategoria()== ''){
             $objResposta->status = false;
             $objResposta->msg = 'nome da categoria vazia';

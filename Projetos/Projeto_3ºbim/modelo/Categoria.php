@@ -31,6 +31,22 @@ class Categoria implements JsonSerializable{
         $this->setIdCategoria($idCadastrado);
         return $executou;
     }
+
+    public function verificarCategoria () {
+        $conexao = Banco::getConexao();
+    
+        $sql =  "SELECT count(*) AS qtd, nomeCategoria FROM categoria WHERE nomeCategoria = ?   GROUP BY nomeCategoria";
+    
+        $prepararsql = $conexao->prepare($sql);
+        $prepararsql->bind_param("s", $this->nomeCategoria);
+        $prepararsql ->execute();
+        $matriz = $prepararsql -> get_result();
+        $objTupla = $matriz -> fetch_object();
+        return $objTupla->qtd > 0;  
+    }
+
+    
+
     public function createFromCsv (){
         $conexao = Banco::getConexao();
         if (!$conexao) {
@@ -70,11 +86,11 @@ class Categoria implements JsonSerializable{
 
     public function readById (){
         $conexao = Banco::getConexao();
-        $sql = "select * from categoria where idCategoria = ?";
+        $sql = "select * from categoria where nomeCategoria = ?";
 
         $prepararSql = $conexao->prepare($sql);
 
-        $prepararSql->bind_param("i",$this->idCategoria);
+        $prepararSql->bind_param("s",$this->nomeCategoria);
         $prepararSql->execute();
         $matriz = $prepararSql->get_result();
         $matrizTuplas = $matriz ->fetch_all(MYSQLI_ASSOC);

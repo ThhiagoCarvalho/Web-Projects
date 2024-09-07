@@ -5,7 +5,6 @@ require_once("modelo/Banco.php");
 require_once("modelo/MeuTokenJWT.php");
 require_once("modelo/Opcao.php");
 
-
 $objResposta = new stdClass();
 $objToken = new MeuTokenJWT();
 $headers = apache_request_headers();
@@ -14,12 +13,11 @@ try{
     if ($objToken->validarToken($headers['Authorization']) == true){
 
         $objOpcao = new Opcao();
-        $objOpcao->setIdOpcao($parametro_idOpcao);
-        
-        if ($objOpcao->readByID()==true){
+        $objOpcao->setIdCategoria($parametro_idOpcao);
+        if ($objOpcao->readId()==true){
             $objResposta->status = true;
             $objResposta->msg = 'executado com sucesso!';
-            $objResposta->dados = $objOpcao->readByID();    
+            $objResposta->dados = $objOpcao->readId();    
             
         }else{
             $objResposta->status = false;
