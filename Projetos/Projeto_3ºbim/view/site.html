@@ -441,7 +441,7 @@
 
                 <div class="method" id="Categoria-metodo-get">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalGetCategoria">Configurar uma categoria</button>
-                    <div class="texto">// Nesta aba, você tem total controle e acesso total sobre dados informados, permitindo até a exclusão caso necessário.</div>
+                    <div class="texto">// Nesta aba, você tem o controle e acesso total sobre as categorias informadas, permitindo até exclusão caso necessário.</div>
                 </div>
             </div>
         </div>
@@ -690,6 +690,11 @@
                 messageOpcaoCreate.textContent = txt
                 messageOpcaoCreate.style.display = "block"; 
 
+            }else if  (nomeOpcao.length <= 4){
+                let txt = "Nome muito curto!"
+                messageOpcaoCreate.textContent = txt
+                messageOpcaoCreate.style.display = "block";
+
             }else{
                 messageOpcaoCreate.style.display = "none";
                 const jsonEnvio = {
@@ -906,6 +911,7 @@
             delete_opcao()
         }
         function delete_opcao (){
+            
             const idOpcao = document.getElementById('idOpcaoGet').value
             if (!idOpcao){
                 messageOpcaoGet.textContent = "Preencha o campo idOpção"
@@ -924,6 +930,7 @@
                     }).catch((error) => {
                         console.error("Error:", error);
                     });
+                    TabelaGetOpcao.innerHTML = '';
 
                     btnDeleteOpcao.textContent = "Feito!";
                     btnDeleteOpcao.classList.add("sucesso");
@@ -945,6 +952,12 @@
                 let txt = "Preencha todos os campos"
                 messageCreateCategoria.textContent = txt
                 messageCreateCategoria.style.display = "block"; 
+
+            }else if  (nomeCategoria.length <= 4){
+                let txt = "Nome muito curto!"
+                messageCreateCategoria.textContent = txt
+                messageCreateCategoria.style.display = "block"; 
+        
             }else{
                 messageCreateCategoria.style.display = "none";
 
@@ -978,6 +991,7 @@
             let txt = "Esta categoria já está cadastrada!"
             messageCreateCategoria.textContent = txt
             messageCreateCategoria.style.display = "block"; 
+        
 
         }else if (json.status == false ){
             let text = "Falha ao cadastrar categoria!"
@@ -1144,6 +1158,7 @@
                 }).catch((error) =>{
                     console.error("Error:", error);
                 })
+                TabelaGetCategoia.innerHTML = '';
 
                 btnDelCategoria.textContent = "Feito!"
                 btnDelCategoria.classList.add("sucesso")

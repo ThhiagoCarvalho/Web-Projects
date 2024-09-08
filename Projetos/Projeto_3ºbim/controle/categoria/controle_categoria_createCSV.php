@@ -42,7 +42,7 @@ try{
     } else {
         $objResposta->codigo = 3;
         $objResposta->status = true;
-        $objResposta->msg = "Todas as categorias foram cadastradas com sucesso";
+        $objResposta->msg = "Todas as categorias foram cadastradas com sucesso!";
         $objResposta->objCategorias = $objCategoria;
         $objResposta->totalCategorias = $i;
     }

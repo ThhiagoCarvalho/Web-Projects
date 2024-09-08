@@ -23,6 +23,7 @@ try{
 
         }else if (strlen($objCategoria->getNomeCategoria())  < 4){
             echo $objCategoria->getNomeCategoria();
+            $objResposta->cod = 3;
             $objResposta->status = false;
             $objResposta->msg = 'nome muito curto';
 
