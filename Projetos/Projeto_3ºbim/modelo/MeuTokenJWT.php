@@ -15,6 +15,7 @@ require_once "jwt/JWT.php";
 require_once "jwt/Key.php";
 require_once "jwt/SignatureInvalidException.php";
 
+
 require_once "jwt/ExpiredException.php";
 
 class MeuTokenJWT

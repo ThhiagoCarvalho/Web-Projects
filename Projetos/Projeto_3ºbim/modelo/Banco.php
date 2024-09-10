@@ -6,7 +6,7 @@
         private static $DB='mydb';
         private static $PORT=3306;
         private static $CONEXAO = null;
-    
+
     private static function conectar(){
 
         error_reporting(E_ERROR | E_PARSE);
@@ -33,7 +33,6 @@
             $objResposta->erro = $e->getMessage();
             die(json_encode($objResposta));
         }
-            
     }
 
 
