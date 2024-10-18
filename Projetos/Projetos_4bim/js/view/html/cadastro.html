@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link rel="stylesheet" type="text/css" href="../css/cadastro.css" media="screen" />
+
+
+</head>
+
+<body>
+    <div id="divResposta">
+        <h1>Criar Conta</h1>
+        <div class="input_container">
+            <input type="text" id="txtNome" placeholder="Nome">
+        </div>
+        <div class="input_container">
+            <input type="email" id="txtEmail" placeholder="Email">
+        </div>
+        <div class="input_container">
+            <input type="password" id="txtSenha" placeholder="Senha">
+        </div>
+        
+        <div class="input_container">
+            <input type="text" id="txtIdade" placeholder="Idade">
+        </div>
+        <div class="input_container">
+            
+            <input type="date" id="dataDate" placeholder="Date">
+            <small>// Selecione a data para o seu encontro.</small>
+
+        </div>
+        <div class="col-md-12 select">
+            <select class="form-select" id="idCategoria_categoria" required="">
+                <option selected="" disabled="" value="">Categoria</option>
+                <!--so vai aparaecer as opcoes apos o get -->
+            </select>
+        </div>
+     
+        <div class="remenber_forget">
+            <a href="rememberPWD.html">Esqueceu a senha?</a>
+        </div>
+        <button id="bntCadastrar">Clique aqui</button>
+        <div id="error-messageUsuarioCreate" class="text-danger" style="display: none;"></div>
+
+        <div class="register">
+            <p>Ja é registrado? <a href="login.html">Login</a></p>
+        </div>
+        <div class="register">
+            <p>Deseja cadastrar por meio de arquivo de textos? <a href="arquivocsv.html">Cadastrar-se</a></p>
+        </div>
+    </div>
+</body>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const uri_categorias = '/usuarios/categorias/';
+        fetch(uri_categorias, {
+                method: "GET"
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                console.log(data)
+                const selectCategoria = document.getElementById('idCategoria_categoria');
+                // Limpa as opções existentes (exceto a padrão)
+                selectCategoria.innerHTML = '<option selected="" disabled="" value="">Categoria</option>';
+
+                // Itera sobre os dados retornados e cria opções para o <select>
+                data.dados.forEach(valor_categoria => {
+                    const optionCreate = document.createElement('option');
+                    optionCreate.value = valor_categoria.idCategoria; // Define o valor da opção
+                    optionCreate.textContent = valor_categoria.nomeCategoria; // Define o texto da opção
+                    selectCategoria.appendChild(optionCreate); // Adiciona a opção ao <select>
+                });
+            }).catch((error) => {
+                console.log("Error ao buscar categorias:", error);
+            });
+        });
+        
+
+    const divResposta = document.getElementById("divResposta")
+    const txtNome = document.getElementById("txtNome");
+    const txtEmail = document.getElementById("txtEmail");
+    const txtSenha = document.getElementById("txtSenha");
+    const txtIdade = document.getElementById("txtIdade");
+    const dataDate = document.getElementById("dataDate");
+    const idCategoria = document.getElementById("idCategoria_categoria");
+
+    const messageCreate = document.getElementById('error-messageUsuarioCreate')
+
+    const bntCadastrar = document.getElementById("bntCadastrar");
+
+
+    bntCadastrar.onclick = function (){
+        cadastrar ();
+    }
+ function cadastrar (){
+    let nome = txtNome.value;
+    let email = txtEmail.value;
+    let senha = txtSenha.value;
+    let idade = txtIdade.value;
+    let data = dataDate.value;
+    let categoria = idCategoria.value ;
+
+    
+    const jsonEnvio = {
+        "nomeUsuario":nome,
+        "emailUsuario":email,
+        "senhaUsuario":senha,
+        "idade":idade,
+        "idCategoria":categoria,
+        "dataDate" : data
+    }
+    console.log(jsonEnvio)
+/*
+  fetch(uri_cadastrar_usuario, {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonEnvio)
+            })
+*/
+    let uri = '/usuarios/';
+    fetch(uri, {
+        method: "post",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonEnvio)
+    }).then((response) => {
+        return response.json();
+    }).then((data) => {
+        console.log(data)
+        processarResultados(data)
+    }).catch((error) => {
+        console.error("Error:", error);
+
+    });
+
+    function processarResultados (texto_json){ 
+        const json = texto_json
+        if (!nome || !email || !senha || !idade || !data || !categoria ){
+            let text = "Preencha todos os campos!"
+            messageCreate.textContent = text
+            messageCreate.style.display = "block";
+            
+        }else  if (json.status == false && json.cod == 1){
+            let text = "Este email ja esta cadastrado!"
+            messageCreate.textContent = text
+            messageCreate.style.display = "block"; 
+
+        }else  if (json.status == false ){
+            let text = "Falha ao cadastrar!"
+            messageCreate.textContent = text
+            messageCreate.style.display = "block"; 
+        
+        }else{
+            console.log("oi")
+            localStorage.setItem("dados",texto_json);
+            window.location = 'login.html'
+            }
+    }
+
+}
+</script>
+</html>

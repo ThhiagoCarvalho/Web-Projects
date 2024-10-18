@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site de Encontros</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/site.css" media="screen" />
+
+</head>
+
+
+<body>
+        <div class="nome" id="cumprimento"></div>
+        <button type="button" class="btn-close sair" aria-label="Close" id="botaoSair"></button>    
+
+      <nav class="navbar navbar-expand-sm  navbar-dark caixa">
+        <div class="tabs">
+            <button class="btn btn-secondary" onclick="showContent('home')">Home</button>
+            <button class="btn btn-secondary" onclick="showContent('categorias')">Categorias</button>
+            <button class="btn btn-secondary" onclick="showContent('opcoes')">Opções</button>
+        </div>
+    </nav>
+
+    <div id="home" class="content active">
+        <div id="home" class="content active home">
+            <div class="home-bloco" id="bloquinho">
+                <div class="col-md-12">
+                    <select class="form-select" id="select_idOpcao_opcao" required="">
+                        <option selected="" disabled="" value="">Escolha umas das opções</option>
+                        <!--so vai aparaecer as opcoes apos o get -->
+                    </select>
+                    <div id = 'select_idOpcao_opcaoDescricao' class="desc" >
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="opcoes" class="content">
+        <div id="home" class="content active homeopcao">
+            <div class="opcao-bloco">
+
+        <div class="metodos">
+                <div class="method" id="metodo-createOpcao">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateOpcao">Criar uma opção</button>
+                    <div class="texto">// Nesta área, você poderá criar uma nova opção  para complementar uma das categorias existentes no site.
+                    </div>
+
+                </div>
+                <div class="method" id="metodo-getOpcao">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalGetOpcao">Configurar uma opção</button>
+                    <div class="texto">// Nesta aba, você tem total controle e acesso total das opções, permitindo até a exclusão caso necessário.
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- modal (forms) CREATE-->
+        <div class="modal fade" id="modalCreateOpcao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Criar Opcao</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formCreateOpcao" class="row g-3 needs-validation" novalidate="">
+
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="nomeOpcao"  placeholder="Nome" required>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="cidadeOpcao" required="" placeholder="Cidade">
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="custoOpcao" required="" placeholder="Custo">
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="horarioOpcao" required="" placeholder="Horário de funcionamento">
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <select class="form-select" id="idCategoria_categoria" required="">
+                                    <option selected="" disabled="" value="">Categoria</option>
+                                    <!--so vai aparaecer as opcoes apos o get -->
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <textarea type="text" class="form-control" id="descricaoOpcaoCreate" required="" placeholder="Descricao"rows="3"></textarea>
+                            </div>
+                            <div class="col-md-10 selectt">
+                                <!-- aquiii>>>-->
+                                <button id = 'btnCadastrarOpcao' class="btn btn-primary" type="button">Cadastrar</button>
+                                <div id="error-messageOpcaoCreate" class="text-danger" style="display: none;"></div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalGetOpcao" tabindex="-1" aria-labelledby="modalGetOpcao" aria-hidden="true" >
+            <div class="modal-dialog  customizar-tabelaOpcao">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalUpdateLabel">Pequisa Opção</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formUpdateOpcao" class="row g-3 needs-validation" novalidate="">
+
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="idOpcaoGet" required="" placeholder="Id Opcao">
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="nomeOpcaoGet"  placeholder="Nome" required>
+                            </div>
+                            <div class="col-4">
+                                <button id = 'btnGetOpcao' class="btn btn-primary" type="button">Pesquisar</button>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="cidadeOpcaoGet" required="" placeholder="Cidade">
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="custoOpcaoGet" required="" placeholder="Custo">
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="horarioOpcaoGet" required="" placeholder="Horário de funcionamento">
+                            </div>
+                            <div class="col-md-12"></div>
+                                <select class="form-select" id="idCategoria_OpcaoGet" required="">
+                                    <option selected="" disabled="" value="">Categoria</option>
+                                    <!--so vai aparaecer as opcoes apos o get -->
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-10 descricao">
+                                <textarea type="text" class="form-control" id="descricaoOpcaoGet" required="" placeholder="Descricao"rows="2"></textarea>
+                            </div>
+
+                            <div class="col-md-12 d-flex botaoMetodos">
+                                <button id='btnUpdateOpcao' class="btn btn-primary" type="button">Atualizar</button>
+                                <button id='btnDeleteOpcao' class="btn btn-primary" type="button">Excluir</button>
+                            </div>
+
+                            <div id="error-messageOpcaoGet" class="text-danger" style="display: none;"></div>
+                            
+                            <div id="tabela-opcao-get" class="tabela_get">
+                                <div class="col-sm-10">
+                                    <table id="Tabela-GetOpcao" class="table table-striped" style="display: none;" >
+                                        <thead>
+                                            <tr>
+                                                <th>ID Opção</th>
+                                                <th>Localização</th>
+                                                <th>Horário de Funcionamento</th>
+                                                <th>Custo Estimado</th>
+                                                <th>Nome da Opção</th>
+                                                <th>ID Categoria</th>
+                                                <th>Descrição</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- As linhas da tabela serão adicionadas aqui pela função JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="categorias" class="content">
+        <div id="home" class="content active homecategoria">
+            <div class="opcao-categoria">
+
+            <div class="metodos">
+                <div class="method" id="Categoria-metodo-crate">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateCategoria">Criar uma categoria</button>
+                    <div class="texto">// Nesta área, você poderá criar uma nova categoria para complementar seu site e, em seguida, associar opções a ela.</div>
+                </div>
+
+                <div class="method" id="Categoria-metodo-get">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalGetCategoria">Configurar uma categoria</button>
+                    <div class="texto">// Nesta aba, você tem o controle e acesso total sobre as categorias informadas, permitindo até exclusão caso necessário.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+       
+     <!-- modal (forms) CREATE-->
+     <div class="modal fade" id="modalCreateCategoria" tabindex="-1" aria-labelledby="modalUpdateLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalUpdateLabel">Cadastar Categoria</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formUpdateOpcao" class="row g-3 needs-validation" novalidate="">
+        
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" id="nomeCategoria" required="" placeholder="Nome da Catgoria ">
+                        </div>
+                        <div class="col-12">
+                            <!-- Botão para enviar as alterações -->
+                            <button id = 'btnCadastrarCategoria' class="btn btn-primary" type="button">Cadastrar</button>
+                        </div>
+                        <div id="error-messageCreateCategoria" class="text-danger" style="display: none;"></div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
+    <div class="modal fade" id="modalGetCategoria" tabindex="-1" aria-labelledby="modalUpdateLabel" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalGetCategoria">Pesquisar categorias</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formGetCategoria" class="row g-3 needs-validation" novalidate="">
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" id="idCategoriaGet" required="" placeholder="Id da Categoria">
+                        </div>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" id="nomeCategoriaGet" required="" placeholder="Nome da Categoria">
+                        </div>
+
+                        <div class="col-4">
+                            <button id = 'btnGetCategoria' class="btn btn-primary" type="button">Pesquisar</button>
+                        </div>
+                        <div class="col-4">
+                            <button id = 'btnUpdCategoria' class="btn btn-primary" type="button">Atualizar</button>
+                        </div>
+                        <div class="col-4">
+                            <button id = 'btnDelCategoria' class="btn btn-primary" type="button">Excluir</button>
+                        </div>
+
+                        <div id="error-messageCategoriaGet" class="text-danger" style="display: none;"></div>
+
+                        <div id="tabela-categoria-get" class="tabela_get">
+                            <div class="col-12">
+                                <table id="Tabela-GetCategoria" class="table table-striped" style="display: none;" >
+                                    <thead>
+                                        <tr>
+                                            <th>ID Categoria</th>
+                                            <th>Nome da Categoria</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- As linhas da tabela serão adicionadas aqui pela função JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const uri_categorias = '/categorias';
+
+
+        fetch(uri_categorias, {
+                method: "GET",
+                headers:{
+                    "Accept":"application/json",
+                    "Content-Type":"application/json",
+                    "Authorization":'Bearer ' + objUsuario.token
+                }
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                console.log(data)
+                const selectCategoria = document.getElementById('idCategoria_categoria');
+                // Limpa as opções existentes (exceto a padrão)
+                selectCategoria.innerHTML = '<option selected="" disabled="" value="">Categoria</option>';
+
+                const selectOpcao= document.getElementById('idCategoria_OpcaoGet');
+                selectOpcao.innerHTML = '<option selected="" disabled="" value="">Categoria</option>';
+
+                // Itera sobre os dados retornados e cria opções para o <select>
+                data.dados.forEach(valor_categoria => {
+                    const optionCreate = document.createElement('option');
+                    optionCreate.value = valor_categoria.idCategoria; // Define o valor da opção
+                    optionCreate.textContent = valor_categoria.nomeCategoria; // Define o texto da opção
+                    selectCategoria.appendChild(optionCreate); // Adiciona a opção ao <select>
+
+                    const optionGet = document.createElement('option');
+                    optionGet.value = valor_categoria.idCategoria; // Define o valor da opção
+                    optionGet.textContent = valor_categoria.nomeCategoria; // Define o texto da opção
+                    selectOpcao.appendChild(optionGet); // Adiciona a opção ao <select
+
+                });
+
+            }).catch((error) => {
+                console.log("Error ao buscar categorias:", error);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+        const uri_categorias = `/opcoes/readAll/${objUsuario.usuario.categoriaID}`;
+
+        // esse fetch ser para ver/mostrar as opcoes relacionadas a categoria que o usuario escolheu no cadastro
+        fetch(uri_categorias, {
+                method: "GET",
+                headers:{
+                    "Accept":"application/json",
+                    "Content-Type":"application/json",
+                    "Authorization":'Bearer ' + objUsuario.token
+                }
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                const select_opcao = document.getElementById('select_idOpcao_opcao');
+                const div_descricao  = document.getElementById('select_idOpcao_opcaoDescricao')
+                // Limpa as opções existentes (exceto a padrão)
+                select_opcao.innerHTML = '<option selected="" disabled="" value="">Opções</option>';
+
+                    const descricoes = {};
+
+                data.dados.forEach(valor_opcoes => {
+                    const optionopcao = document.createElement('option');
+
+                    optionopcao.value = valor_opcoes.idOpcoes; // Define o valor da opção
+                    optionopcao.textContent = valor_opcoes.nomeOpcao; // Define o texto da opção
+                    select_opcao.appendChild(optionopcao); // Adiciona a opção ao <select>
+                        
+                        descricoes[valor_opcoes.idOpcoes] = {
+                            descricao: valor_opcoes.descricao,
+                            local: valor_opcoes.localizacaoOpcao,
+                            custo: valor_opcoes.custoEstimado,
+                            horario : valor_opcoes.horarioFucionamento
+                        };  
+                                          
+                    });
+                    select_opcao.addEventListener('change', function() {
+                        const selectedValue = this.value;
+                        // Atualiza o conteúdo da div com a descrição correspondente
+                        const selectedOpcao = descricoes[selectedValue];
+
+                        // Atualiza o conteúdo da div com todas as informações
+                        div_descricao.innerHTML = `
+                            <p><strong>Descrição:</strong> ${selectedOpcao.descricao || "Nenhuma descrição disponível."}</p>
+                            <p><strong>Local:</strong> ${selectedOpcao.local || "Local não informado."}</p>
+                            <p><strong>Custo:</strong> ${selectedOpcao.custo || "Custo não informado."}</p>
+                            <p><strong>Horário :</strong> ${selectedOpcao.horario || "Horário  não informado."}</p>
+
+                        `;              
+
+                    });
+            }).catch((error) => {
+                console.log("Error ao buscar categorias:", error);
+            });
+        });        
+        
+        const dadosUsuarios = localStorage.getItem("dados")
+        const objUsuario = JSON.parse(dadosUsuarios);
+
+        const divCumprimento = document.getElementById('cumprimento')
+        const botaoSair = document.getElementById('botaoSair')
+
+        const btnCadastrarOpcao = document.getElementById('btnCadastrarOpcao')
+        const btnUpdateOpcao = document.getElementById('btnUpdateOpcao')
+        const btnGetOpcao = document.getElementById('btnGetOpcao');
+        const btnDeleteOpcao = document.getElementById('btnDeleteOpcao')
+
+        const btnCadastrarCategoria = document.getElementById('btnCadastrarCategoria')
+        const btnUpdCategoria = document.getElementById('btnUpdCategoria')
+        const btnGetCategoria = document.getElementById('btnGetCategoria')
+        const btnExcluirCategoria = document.getElementById('btnExcluirCategoria')
+        const p = document.createElement("p")
+
+
+        const messageOpcaoCreate = document.getElementById("error-messageOpcaoCreate");
+        const messageOpcaoGet = document.getElementById("error-messageOpcaoGet")
+
+        const messageCreateCategoria = document.getElementById("error-messageCreateCategoria");
+        const messageCategoriaGet = document.getElementById("error-messageCategoriaGet")
+        
+        const TabelaGetOpcao = document.getElementById('Tabela-GetOpcao')
+        const TabelaGetCategoia = document.getElementById('Tabela-GetCategoria')
+
+        //saudacao
+        const h1 = document.createElement('h1');
+        h1.textContent = "Seja bem-vindo " + objUsuario.usuario.nomeUsuario + "❤️";
+        divCumprimento.appendChild(h1);
+
+
+        function showContent(tab) {
+            // Esconder todos os conteúdos
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Mostrar o conteúdo da aba clicada ex:opcao
+            const activeContent = document.getElementById(tab);
+            activeContent.classList.add('active');
+        }
+
+        //botao de sair 'xizinho'
+        botaoSair.onclick = function (){
+            window.location = 'cadastro.html'
+        }
+
+        document.getElementById('btnCadastrarOpcao').addEventListener('click', create_opcao);
+        function create_opcao(){
+
+            const nomeOpcao=document.getElementById("nomeOpcao").value
+            const cidadeOpcao=document.getElementById("cidadeOpcao").value
+            const custoOpcao=document.getElementById("custoOpcao").value
+            const horarioOpcao=document.getElementById("horarioOpcao").value
+            const idCategoria=document.getElementById("idCategoria_categoria").value
+            const descricao = document.getElementById('descricaoOpcaoCreate').value
+
+
+            if (!nomeOpcao || !cidadeOpcao || !custoOpcao || !horarioOpcao || !idCategoria || !descricao ){
+
+                let txt = "Preencha todos os campos"
+                messageOpcaoCreate.textContent = txt
+                messageOpcaoCreate.style.display = "block"; 
+
+            }else if  (nomeOpcao.length <= 4){
+                let txt = "Nome muito curto!"
+                messageOpcaoCreate.textContent = txt
+                messageOpcaoCreate.style.display = "block";
+
+            }else{
+                messageOpcaoCreate.style.display = "none";
+                const jsonEnvio = {
+                    "nomeOpcao": nomeOpcao,
+                    "localizacaoOpcao": cidadeOpcao,
+                    "custoOpcao": custoOpcao,
+                    "horarioFuncionamento": horarioOpcao,
+                    "categoria_idCategoria":idCategoria,
+                    "descricao" : descricao
+                }
+
+                let uri = '/opcoes';
+                fetch(uri, {
+                    method: "POST",
+                    body: JSON.stringify(jsonEnvio),
+                    headers:{
+                        "Accept":"application/json",
+                        "Content-Type":"application/json",
+                        "Authorization":'Bearer ' + objUsuario.token
+                    }
+                }).then((response) => {
+                    return response.text();
+                }).then((data) => {
+                    console.log(data)
+                    processarDados(data)
+                }).catch((error) => {
+                    console.error("Error:", error);
+                });
+            }
+        }
+        function processarDados (texto_json){ 
+        const json = JSON.parse(texto_json)
+        
+        if (json.status == false && json.cod == 1){
+            let txt = "Esta opção já está cadastrado!"
+            messageOpcaoCreate.textContent = txt
+            messageOpcaoCreate.style.display = "block"; 
+
+        }else if (json.status == false ){
+            let text = "Falha ao cadastrar opção!"
+            messageCreate.textContent = text
+            messageCreate.style.display = "block"; 
+        
+        }else{
+            btnCadastrarOpcao.textContent = "Feito!"; 
+            btnCadastrarOpcao.classList.add("sucesso");
+
+            setTimeout(() => {
+                btnCadastrarOpcao.textContent = "Cadastrar"; 
+                btnCadastrarOpcao.classList.remove("sucesso"); 
+            }, 2000); // 2000 milissegundos = 2 segundos
+        }
+    }
+
+        document.getElementById('btnUpdateOpcao').addEventListener('click', put_opcao);
+
+        function put_opcao(){
+            const idOpcao=document.getElementById("idOpcaoGet").value
+            const nomeOpcao=document.getElementById("nomeOpcaoGet").value
+            const cidadeOpcao=document.getElementById("cidadeOpcaoGet").value
+            const custoOpcao=document.getElementById("custoOpcaoGet").value
+            const horarioOpcao=document.getElementById("horarioOpcaoGet").value
+            const idCategoria=document.getElementById("idCategoria_OpcaoGet").value
+            const descricao = document.getElementById('descricaoOpcaoGet').value
+
+            if (!idOpcao || !nomeOpcao || !cidadeOpcao || !custoOpcao || !horarioOpcao || !idCategoria || !descricao){
+
+                let text = "Preencha todos os campos"
+                messageOpcaoGet.textContent = text
+                messageOpcaoGet.style.display = "block"; 
+
+            }else{
+                messageOpcaoGet.style.display = "none";
+                const jsonEnvio = {
+                    "nomeOpcao": nomeOpcao,
+                    "localizacaoOpcao": cidadeOpcao,
+                    "custoOpcao": custoOpcao,
+                    "horarioFuncionamento": horarioOpcao,
+                    "categoria_idCategoria":idCategoria,
+                    "descricao" : descricao
+                }
+                
+                const uri_update = `/opcoes/${idOpcao}`;
+                fetch(uri_update, {
+                    method: "PUT",
+                    body: JSON.stringify(jsonEnvio),
+                    headers:{
+                        "Accept":"application/json",
+                        "Content-Type":"application/json",
+                        "Authorization":'Bearer ' + objUsuario.token
+                    }
+                }).then((response) => {
+                    return response.text();
+                }).then((data) => {
+                    console.log(data)
+                }).catch((error) => {
+                    console.error("Error:", error);
+                });
+
+                btnUpdateOpcao.textContent = "Atualizado!"; 
+                btnUpdateOpcao.classList.add("sucesso");
+                setTimeout(() => {
+                    btnUpdateOpcao.textContent = "Atualizar"; 
+                    btnUpdateOpcao.classList.remove("sucesso"); 
+                }, 2000); // 2000 milissegundos = 2 segundos
+            }
+        }
+       
+       btnGetOpcao.onclick = function (){
+            get_opcao()
+        }
+        function get_opcao(){
+            const nomeOpcaoGet=document.getElementById("nomeOpcaoGet").value
+
+
+            const jsonEnvio = {
+                "nomeOpcao":nomeOpcaoGet
+            }
+
+            if (!nomeOpcaoGet){
+                let text = "O campo nome da opção esta vazio!"
+                messageOpcaoGet.textContent = text
+                messageOpcaoGet.style.display = "block"; 
+            }else{
+                messageOpcaoGet.style.display = "none"; 
+                const uri_get_opcao = "/opcoes/nomes/"
+
+                fetch(uri_get_opcao, {
+                        method: "post",
+                        headers:{
+                        "Accept":"application/json",
+                        "Content-Type":"application/json",
+                        "Authorization":'Bearer ' + objUsuario.token
+                    },
+                    body : JSON.stringify(jsonEnvio)
+                    }).then((response) => {
+                        return response.json();
+                    }).then((data) => {
+                        montarTabelaOpcao (data)
+                    }).catch((error) => {
+                        console.error("Error:", error);
+                    });
+            }
+        }
+
+        function montarTabelaOpcao(objJson_get){
+            const tbody=document.createElement("tbody");
+            tbody.innerHTML = '';
+            TabelaGetOpcao.innerHTML = '';
+            if (objJson_get.status == false){
+                messageOpcaoGet.textContent = "Sem resultados"
+                messageOpcaoGet.style = "block";
+            }else{
+                console.log(objJson_get)
+                messageOpcaoGet.style = "display: none";
+
+                objJson_get.dados.forEach(dados_get =>{
+                    const linhaTabela = document.createElement('tr')
+                    const colunas = [
+                        dados_get.idOpcoes,
+                        dados_get.localizacaoOpcao,
+                        dados_get.horarioFucionamento,  
+                        dados_get.custoEstimado,
+                        dados_get.nomeOpcao,
+                        dados_get.Categoria_idCategoria,
+                        dados_get.descricao
+
+                    ];
+                    
+                    colunas.forEach(valor =>{
+                        const colunaTabela = document.createElement('td')
+                        colunaTabela.textContent = valor
+                        linhaTabela.append(colunaTabela)
+                    });
+
+                    const colunaBotaoOpcao = document.createElement('td'); // Criando uma nova coluna para o botão
+                    const btnSelectOpcao = document.createElement('button')
+                    btnSelectOpcao.textContent = 'Selecione'; // Definindo o texto do botão
+                    colunaBotaoOpcao.appendChild(btnSelectOpcao);
+                    linhaTabela.append(colunaBotaoOpcao)
+
+                    tbody.appendChild(linhaTabela);
+
+                    const obj = objJson_get
+                    console.log(dados_get)
+
+                    btnSelectOpcao.onclick = function(event){
+                        event.preventDefault(); // Impede que a página seja recarregada
+                        const obj = dados_get;
+                        const nomeOpcaoGet = document.getElementById("nomeOpcaoGet")
+                        nomeOpcaoGet.value = obj.nomeOpcao;
+
+                        const idOpcaoGet = document.getElementById("idOpcaoGet")
+                        idOpcaoGet.value = obj.idOpcoes
+
+                        const cidadeOpcao = document.getElementById("cidadeOpcaoGet")
+                        cidadeOpcao.value = obj.localizacaoOpcao
+
+                        const custoOpcao = document.getElementById("custoOpcaoGet")
+                        custoOpcao.value = obj.custoEstimado
+
+                        const horarioOpcao = document.getElementById("horarioOpcaoGet")
+                        horarioOpcao.value = obj.horarioFucionamento
+
+                        const idCategoria = document.getElementById("idCategoria_OpcaoGet")
+                        idCategoria.value = obj.Categoria_idCategoria
+
+                        const descricao = document.getElementById("descricaoOpcaoGet")
+                        descricao.value = obj.descricao
+                    }
+                });
+
+                TabelaGetOpcao.appendChild(tbody);
+                TabelaGetOpcao.style.display = "block";
+            }
+        }
+
+
+        btnDeleteOpcao.onclick = function (){
+            delete_opcao()
+        }
+        function delete_opcao (){
+            
+            const idOpcao = document.getElementById('idOpcaoGet').value
+            if (!idOpcao){
+                messageOpcaoGet.textContent = "Preencha o campo idOpção"
+                messageOpcaoGet.style = "block";
+            }else{
+                messageOpcaoGet.style = "none"
+                const uri_delete_opcao = `/opcoes/${idOpcao}`
+
+                fetch(uri_delete_opcao, {
+                        method: "DELETE",
+                        headers:{
+                        "Accept":"application/json",
+                        "Content-Type":"application/json",
+                        "Authorization":'Bearer ' + objUsuario.token
+                    }
+                    }).catch((error) => {
+                        console.error("Error:", error);
+                    });
+                    TabelaGetOpcao.innerHTML = '';
+
+                    btnDeleteOpcao.textContent = "Feito!";
+                    btnDeleteOpcao.classList.add("sucesso");
+                    
+                    setTimeout(() => {
+                        btnDeleteOpcao.textContent = "Excluir"; 
+                        btnDeleteOpcao.classList.remove("sucesso"); 
+                    }, 2000); // 2000 milissegundos = 2 segundos
+            }
+        }
+
+
+
+        document.getElementById("btnCadastrarCategoria").addEventListener('click',post_categorias)
+        function post_categorias (){
+            const nomeCategoria = document.getElementById("nomeCategoria").value
+
+            if (!nomeCategoria ){
+                let txt = "Preencha todos os campos"
+                messageCreateCategoria.textContent = txt
+                messageCreateCategoria.style.display = "block"; 
+
+            }else if  (nomeCategoria.length <= 4){
+                let txt = "Nome muito curto!"
+                messageCreateCategoria.textContent = txt
+                messageCreateCategoria.style.display = "block"; 
+        
+            }else{
+                messageCreateCategoria.style.display = "none";
+
+                const jsonEnvio = {
+                    "nomeCategoria":nomeCategoria
+                }
+
+                const uri_post_categorias = '/categorias'
+                fetch (uri_post_categorias, {
+                    method : "POST",
+                    body : JSON.stringify(jsonEnvio),
+                    headers : {
+                        "Accept":"application/json",
+                        "Content-Type":"application/json",
+                        "Authorization":'Bearer ' + objUsuario.token
+                    }
+                }).then ((response) =>{
+                    return response.text()
+                }).then ((data) =>{
+                    processarDadosCategorias(data)
+
+                }).catch((error)=> {
+                    console.error("Error:", error);
+                })   
+            }
+        }
+        function processarDadosCategorias (texto_json){ 
+        const json = JSON.parse(texto_json)
+        
+        if (json.status == false){
+            let txt = json.msg
+            messageCreateCategoria.textContent = txt
+            messageCreateCategoria.style.display = "block"; 
+        
+        }else{
+            btnCadastrarCategoria.textContent = "Feito!"; 
+            btnCadastrarCategoria.classList.add("sucesso");
+
+            setTimeout(() => {
+                btnCadastrarCategoria.textContent = "Cadastrar"; 
+                btnCadastrarCategoria.classList.remove("sucesso"); 
+            }, 2000); // 2000 milissegundos = 2 segundos
+        }
+    }
+
+        document.getElementById("btnUpdCategoria").addEventListener('click',put_categorias)
+        function put_categorias (){
+            const idCategoria = document.getElementById("idCategoriaGet").value
+            const nomeCategoria = document.getElementById("nomeCategoriaGet").value
+
+            if (!idCategoria || !nomeCategoria){
+                let txt = "Preencha todos os campos"
+                messageCategoriaGet.textContent = txt
+                messageCategoriaGet.style.display = "block"; 
+
+            }else{
+                messageCategoriaGet.style.display = "none";
+
+                const jsonEnvioUpdate = {
+                    "idCategoria" : idCategoria,
+                    "nomeCategoria":nomeCategoria
+                }
+                const uri_put_categorias = `/categorias/${idCategoria}`
+
+                fetch (uri_put_categorias, {
+                    method : "PUT",
+                    body : JSON.stringify(jsonEnvioUpdate),
+                    headers : {
+                        "Accept":"application/json",
+                        "Content-Type":"application/json",
+                        "Authorization":'Bearer ' + objUsuario.token
+                    }
+                }).then ((response) =>{
+                    return response.text()
+                }).then ((data) =>{
+                    console.log(data)
+                }).catch((error)=> {
+                    console.error("Error:", error);
+                })   
+                btnUpdCategoria.textContent = "Feito!"; 
+                btnUpdCategoria.classList.add("sucesso");
+
+                setTimeout(() => {
+                    btnUpdCategoria.textContent = "Atualizar"; 
+                    btnUpdCategoria.classList.remove("sucesso"); 
+                }, 2000); // 2000 milissegundos = 2 segundos
+            }
+        }
+
+        btnGetCategoria.onclick = function (){
+            get_Categoria()
+        }
+        function get_Categoria(){
+            const nomeCategoriaGet = document.getElementById("nomeCategoriaGet").value
+
+            const jsonEnvio = {
+                "nomeCategoria":nomeCategoriaGet,
+            }
+            
+            if (!nomeCategoriaGet){
+                messageCategoriaGet.textContent = "Preencha o campo nome"
+                messageCategoriaGet.style = "block"
+
+            }else{
+                messageCategoriaGet.style = "display: none"
+                
+
+                const uri_get_categoria = "/categorias/getCategorias/";
+                fetch(uri_get_categoria, {
+                        method: "POST",
+                        headers:{
+                        "Accept":"application/json",
+                        "Content-Type":"application/json",
+                        "Authorization":'Bearer ' + objUsuario.token
+                        },
+                        body: JSON.stringify(jsonEnvio)
+                    }).then((response) => {
+                        return response.text();
+                    }).then((data) => {
+                        montarTabelaCatoria (data)
+                    }).catch((error) => {
+                        console.error("Error:", error);
+                    });
+            }
+        }
+
+        function montarTabelaCatoria (resultadojson){
+            const objJson_getCategoria = JSON.parse(resultadojson)
+            const tbodyCategoria = document.createElement("tbody");
+            tbodyCategoria.innerHTML = '';
+            TabelaGetCategoia.innerHTML = '';
+
+
+            if (objJson_getCategoria.status == false){
+                messageCategoriaGet.textContent = "Sem resultados"
+                messageCategoriaGet.style = "block"
+            }else {
+                messageCategoriaGet.style = "display: none"
+                objJson_getCategoria.dados.forEach(dados_get =>{
+                    
+                    const linhaTabela = document.createElement('tr')
+                    const colunas = [
+                        dados_get.idCategoria,
+                        dados_get.nomeCategoria
+                    ];
+                    
+                    colunas.forEach(valor =>{
+                        const colunaTabela = document.createElement('td')
+                        colunaTabela.textContent = valor
+                        linhaTabela.append(colunaTabela)
+                    });
+                    const colunaBotao = document.createElement('td'); // Criando uma nova coluna para o botão
+                    const btnSelect = document.createElement('button')
+                    btnSelect.textContent = 'Selecione'; // Definindo o texto do botão
+                    colunaBotao.appendChild(btnSelect);
+                    linhaTabela.append(colunaBotao)
+
+
+                    tbodyCategoria.appendChild(linhaTabela);
+                    const obj = objJson_getCategoria
+
+                    btnSelect.onclick = function(event){
+                        event.preventDefault(); // Impede que a página seja recarregada
+                        const obj = dados_get;
+                        nomeCategoriaGet.value = obj.nomeCategoria;
+                        const idCategoria = document.getElementById("idCategoriaGet")
+                        idCategoria.value = obj.idCategoria
+                    }
+
+                });
+
+                TabelaGetCategoia.appendChild(tbodyCategoria);
+                TabelaGetCategoia.style.display = "block";
+            }
+        }
+
+        
+        btnDelCategoria.onclick = function(){
+            delete_categoria()
+        }
+        function delete_categoria(){
+            const idCategoriaDelete = document.getElementById('idCategoriaGet').value
+            if (!idCategoriaDelete){
+                messageCategoriaGet.textContent = "Preencha o campo idCategoria"
+                messageCategoriaGet.style = "block"
+
+            }else{
+                messageCategoriaGet.style = "none"
+
+                const uri_delete_categoria = `/categorias/${idCategoriaDelete}`
+                fetch (uri_delete_categoria, {
+                    method : "DELETE",
+                    headers:{
+                        "Accept":"application/json",
+                        "Content-Type":"application/json",
+                        "Authorization":'Bearer ' + objUsuario.token
+                    }
+                }).catch((error) =>{
+                    console.error("Error:", error);
+                })
+                TabelaGetCategoia.innerHTML = '';
+
+                btnDelCategoria.textContent = "Feito!"
+                btnDelCategoria.classList.add("sucesso")
+
+                setTimeout(() => {
+                    btnDelCategoria.textContent = "Excluir"; 
+                    btnDelCategoria.classList.remove("sucesso"); 
+                }, 2000); // 2000 milissegundos = 2 segundos
+            }
+        }
+    </script>
+
+</body>
+</html>
