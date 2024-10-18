@@ -7,22 +7,30 @@ def handle_validation_error(e):
     return jsonify({"erro": str(e)}), 400
 
 
-@app.route('/categorias', methods=['get'])
+@app.route('/categorias/getCategorias/', methods=['post'])
 def get_categorias ():
     try: 
         body = request.get_json()
         controlCategoria = categoriaController()
         controlCategoria.categoria.nomeCategoria = body['nomeCategoria']
+        return controlCategoria.get_categoriaNome()
+
+    except ValueError as error :
+        return handle_validation_error(error)
+
+@app.route('/categorias', methods=['get'])
+def get_Allcategorias ():
+    try: 
+        controlCategoria = categoriaController()
         return controlCategoria.get_categoria()
 
     except ValueError as error :
         return handle_validation_error(error)
     
-
-    
-@app.route('/categorias/<float:idCategoria>', methods=['delete'])
+@app.route('/categorias/<int:idCategoria>', methods=['delete'])
 def delete_categorias (idCategoria):
     try: 
+        idCategoria  = int(idCategoria)
         controlCategoria = categoriaController()
         controlCategoria.categoria.idCategoria = idCategoria
         return controlCategoria.delete_categorias(idCategoria)
@@ -32,7 +40,7 @@ def delete_categorias (idCategoria):
     
 
 
-@app.route('/categorias/<float:idCategoria>', methods=['put'])
+@app.route('/categorias/<int:idCategoria>', methods=['PUT'])
 def put_categorias (idCategoria):
     try: 
         body = request.get_json()
@@ -45,7 +53,7 @@ def put_categorias (idCategoria):
         return handle_validation_error(error)
     
 
-@app.route('/categorias/<float:idCategoria>', methods=['post'])
+@app.route('/categorias', methods=['post'])
 def post_categorias ():
     try: 
         body = request.get_json()

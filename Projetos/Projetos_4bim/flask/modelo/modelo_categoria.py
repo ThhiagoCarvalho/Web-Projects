@@ -13,19 +13,28 @@ class Categoria :
         conexao = Banco.getConexao()
         if conexao : 
             cursor = conexao.cursor()
-            sql = "select * from categorias where nomeCategoria = %s"
+            sql = "select * from categoria where nomeCategoria = %s"
             cursor.execute(sql, (self.nomeCategoria,))
             result = cursor.fetchall()
             return result
 
+
+    def get_allCategorias(self):
+        conexao = Banco.getConexao()
+        if conexao : 
+            cursor = conexao.cursor()
+            sql = "select * from categoria"
+            cursor.execute(sql,)
+            result = cursor.fetchall()
+            return result
     
-    def delete_categorias(self):
+    def delete_categorias(self , idCategoria):
         conexao = Banco.getConexao()
         if conexao :
             try :  
                 cursor = conexao.cursor()
-                sql = "delete from categorias where nomeCategoria = %s"
-                cursor.execute(sql, (self.nomeCategoria,))
+                sql = "delete from categoria where idCategoria = %s"
+                cursor.execute(sql, (idCategoria,))
                 conexao.commit()
                 return cursor.rowcount
             except Error as e : 
@@ -49,7 +58,7 @@ class Categoria :
         if conexao :
             try :  
                 cursor = conexao.cursor()
-                sql = "insert into categoria (nomeCategoria = %s )"
+                sql = "insert into categoria (nomeCategoria) values (%s)"
                 cursor.execute(sql, (self.nomeCategoria,))
                 conexao.commit()
                 return cursor.rowcount

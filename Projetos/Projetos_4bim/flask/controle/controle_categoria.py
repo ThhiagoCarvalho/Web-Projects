@@ -15,6 +15,20 @@ class categoriaController:
 
         
     def get_categoria(self):
+        buscaCategorias = self._categoria.get_allCategorias()
+        if buscaCategorias:
+            msg = "Categoria buscada com sucesso"
+        else :
+            msg = "Erro ao buscar categoria"
+            
+        return jsonify({
+                "status": True if buscaCategorias else False,
+                "msg": msg,
+                "dados": buscaCategorias
+            }), 200    
+
+
+    def get_categoriaNome(self):
         buscaCategorias = self._categoria.get_categoria()
         if buscaCategorias:
             msg = "Categoria buscada com sucesso"
@@ -23,12 +37,12 @@ class categoriaController:
             
         return jsonify({
                 "status": True if buscaCategorias else False,
-                "msg": msg
+                "msg": msg,
+                "dados": buscaCategorias
             }), 200    
     
-
-    def delete_categorias(self):
-        linhaAfetadas = self._categoria.delete_categorias()
+    def delete_categorias(self, idCategoria):
+        linhaAfetadas = self._categoria.delete_categorias(idCategoria)
         if linhaAfetadas:
             msg = "Categoria excluida com sucesso"
         else :
