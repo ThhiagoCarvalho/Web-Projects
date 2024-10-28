@@ -110,6 +110,20 @@ module.exports  = class Opcao  {
     }
 
 
+    async validar_IDopcao () { 
+        const conexao = Banco.getConexao()
+        const sql = "select count(*) as qtd from opcoes where idOpcoes = ? ";
+        try {
+            const [result] = await conexao.promise().execute  (sql, [this._idOpcao])
+            console.log(result)
+            return result[0].qtd > 0;
+        }catch (error) {
+            console.log("Errro >>>" , error)
+            return false        
+        }
+    }
+
+
       get idOpcao() {
         return this._idOpcao;
     }

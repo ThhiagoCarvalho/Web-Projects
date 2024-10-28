@@ -64,6 +64,8 @@ body {
             background: #555;
         }
         .text-danger {
+            text-align: center;
+
             color: red;
             font-weight: bold;
             margin-top: 10px;

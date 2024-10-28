@@ -1,6 +1,6 @@
 const express = require('express');
 const Opcao = require("../modelo/Opcao");
-
+const MeuTokeJWT = require("../modelo/MeuTokenJWT")
 module.exports = class middlewareOpcao {
 
 
@@ -50,6 +50,24 @@ module.exports = class middlewareOpcao {
         }else { 
             next();
         }
+    };
+
+
+    async validar_Idopcao (req, res, next)  {
+        const  idOpcao  = req.params.idOpcao;
+        const objOpcao = new Opcao()
+        objOpcao.idOpcao = idOpcao
+        const existeOpcao = await objOpcao.validar_IDopcao() 
+        console.log(existeOpcao)
+        if (existeOpcao) {
+            next();
+        
+        }else { 
+            const objResposta = {
+                msg : "Esta opcao nao existe" ,
+                status : false
+            }
+            res.status(200).send(objResposta);        }
     };
 
 

@@ -392,7 +392,7 @@
         const btnCadastrarCategoria = document.getElementById('btnCadastrarCategoria')
         const btnUpdCategoria = document.getElementById('btnUpdCategoria')
         const btnGetCategoria = document.getElementById('btnGetCategoria')
-        const btnExcluirCategoria = document.getElementById('btnExcluirCategoria')
+        const btnDelCategoria = document.getElementById('btnDelCategoria')
         const p = document.createElement("p")
 
 
@@ -481,16 +481,10 @@
         function processarDados (texto_json){ 
         const json = JSON.parse(texto_json)
         
-        if (json.status == false && json.cod == 1){
-            let txt = "Esta opção já está cadastrado!"
+        if (json.status == false ){
+            let txt = json.msg
             messageOpcaoCreate.textContent = txt
             messageOpcaoCreate.style.display = "block"; 
-
-        }else if (json.status == false ){
-            let text = "Falha ao cadastrar opção!"
-            messageCreate.textContent = text
-            messageCreate.style.display = "block"; 
-        
         }else{
             btnCadastrarOpcao.textContent = "Feito!"; 
             btnCadastrarOpcao.classList.add("sucesso");
@@ -540,19 +534,28 @@
                         "Authorization":'Bearer ' + objUsuario.token
                     }
                 }).then((response) => {
-                    return response.text();
+                    return response.json();
                 }).then((data) => {
                     console.log(data)
+
+                    if (data.status == false) {
+                        let txt = data.msg
+                        messageOpcaoGet.textContent = txt
+                        messageOpcaoGet.style.display = "block"; 
+                    }else {  
+                        btnUpdateOpcao.textContent = "Atualizado!"; 
+                        btnUpdateOpcao.classList.add("sucesso");
+                        setTimeout(() => {
+                            btnUpdateOpcao.textContent = "Atualizar"; 
+                            btnUpdateOpcao.classList.remove("sucesso"); 
+                        }, 2000); // 2000 milissegundos = 2 segundos               
+                    }
+
                 }).catch((error) => {
                     console.error("Error:", error);
                 });
 
-                btnUpdateOpcao.textContent = "Atualizado!"; 
-                btnUpdateOpcao.classList.add("sucesso");
-                setTimeout(() => {
-                    btnUpdateOpcao.textContent = "Atualizar"; 
-                    btnUpdateOpcao.classList.remove("sucesso"); 
-                }, 2000); // 2000 milissegundos = 2 segundos
+
             }
         }
        
@@ -685,22 +688,29 @@
                         "Accept":"application/json",
                         "Content-Type":"application/json",
                         "Authorization":'Bearer ' + objUsuario.token
+                        }
+                }).then ((response) =>{
+                    return response.json()
+                }).then ((data) =>{
+                    if (data.status == false) {
+                        let txt = data.msg
+                        messageOpcaoGet.textContent = txt
+                        messageOpcaoGet.style.display = "block"; 
+                    }else {  
+                        btnDeleteOpcao.textContent = "Feito!";
+                        btnDeleteOpcao.classList.add("sucesso");
+                        
+                        setTimeout(() => {
+                            btnDeleteOpcao.textContent = "Excluir"; 
+                            btnDeleteOpcao.classList.remove("sucesso"); 
+                        }, 2000); // 2000 milissegundos = 2 segundos                    
                     }
-                    }).catch((error) => {
+                }).catch((error) => {
                         console.error("Error:", error);
-                    });
+                });
                     TabelaGetOpcao.innerHTML = '';
-
-                    btnDeleteOpcao.textContent = "Feito!";
-                    btnDeleteOpcao.classList.add("sucesso");
-                    
-                    setTimeout(() => {
-                        btnDeleteOpcao.textContent = "Excluir"; 
-                        btnDeleteOpcao.classList.remove("sucesso"); 
-                    }, 2000); // 2000 milissegundos = 2 segundos
             }
         }
-
 
 
         document.getElementById("btnCadastrarCategoria").addEventListener('click',post_categorias)
@@ -790,19 +800,26 @@
                         "Authorization":'Bearer ' + objUsuario.token
                     }
                 }).then ((response) =>{
-                    return response.text()
+                    return response.json()
                 }).then ((data) =>{
                     console.log(data)
+                    if (data.status == false) {
+                        let txt = data.msg
+                        messageCategoriaGet.textContent = txt
+                        messageCategoriaGet.style.display = "block"; 
+                    }else {             
+                        btnUpdCategoria.textContent = "Feito!"; 
+                        btnUpdCategoria.classList.add("sucesso");
+
+                        setTimeout(() => {
+                            btnUpdCategoria.textContent = "Atualizar"; 
+                            btnUpdCategoria.classList.remove("sucesso"); 
+                        }, 2000); // 2000 milissegundos = 2 segundos
+                    }
                 }).catch((error)=> {
                     console.error("Error:", error);
                 })   
-                btnUpdCategoria.textContent = "Feito!"; 
-                btnUpdCategoria.classList.add("sucesso");
 
-                setTimeout(() => {
-                    btnUpdCategoria.textContent = "Atualizar"; 
-                    btnUpdCategoria.classList.remove("sucesso"); 
-                }, 2000); // 2000 milissegundos = 2 segundos
             }
         }
 
@@ -844,11 +861,14 @@
         }
 
         function montarTabelaCatoria (resultadojson){
+            console.log(resultadojson)
             const objJson_getCategoria = JSON.parse(resultadojson)
+            console.log("oi")
+
+
             const tbodyCategoria = document.createElement("tbody");
             tbodyCategoria.innerHTML = '';
             TabelaGetCategoia.innerHTML = '';
-
 
             if (objJson_getCategoria.status == false){
                 messageCategoriaGet.textContent = "Sem resultados"
@@ -895,10 +915,14 @@
 
         
         btnDelCategoria.onclick = function(){
+            console.log("Delete>>>>>>>>>")
             delete_categoria()
         }
         function delete_categoria(){
+            console.log("Delete>>>>>>>>>")
+
             const idCategoriaDelete = document.getElementById('idCategoriaGet').value
+            console.log(idCategoriaDelete)
             if (!idCategoriaDelete){
                 messageCategoriaGet.textContent = "Preencha o campo idCategoria"
                 messageCategoriaGet.style = "block"
@@ -914,21 +938,30 @@
                         "Content-Type":"application/json",
                         "Authorization":'Bearer ' + objUsuario.token
                     }
+                }).then ((response) =>{
+                    return response.json()
+                }).then ((data) =>{
+                    if (data.status == false) {
+                        let txt = data.msg
+                        messageCategoriaGet.textContent = txt
+                        messageCategoriaGet.style.display = "block"; 
+                    }else {  
+                        btnDelCategoria.textContent = "Feito!"
+                        btnDelCategoria.classList.add("sucesso")
+
+                        setTimeout(() => {
+                            btnDelCategoria.textContent = "Excluir"; 
+                            btnDelCategoria.classList.remove("sucesso"); 
+                        }, 2000); // 2000 milissegundos = 2 segundos
+                    }     
                 }).catch((error) =>{
                     console.error("Error:", error);
                 })
                 TabelaGetCategoia.innerHTML = '';
-
-                btnDelCategoria.textContent = "Feito!"
-                btnDelCategoria.classList.add("sucesso")
-
-                setTimeout(() => {
-                    btnDelCategoria.textContent = "Excluir"; 
-                    btnDelCategoria.classList.remove("sucesso"); 
-                }, 2000); // 2000 milissegundos = 2 segundos
             }
         }
     </script>
 
 </body>
 </html>
+

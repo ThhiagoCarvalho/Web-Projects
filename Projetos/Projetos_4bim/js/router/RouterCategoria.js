@@ -20,12 +20,14 @@ module.exports = class RouterCategoria {
 
         this._router.put ('/:idCategoria' ,      
             this._middleCategoria.validar_autenticacao,
- 
+            this._middleCategoria.validar_Idcategoria_existente,
+
             this._controleCategoria.controle_categoria_update
         )
 
         this._router.delete ('/:idCategoria' ,
             this._middleCategoria.validar_autenticacao,
+            this._middleCategoria.validar_Idcategoria_existente,
 
             this._controleCategoria.controle_categoria_delete
         )

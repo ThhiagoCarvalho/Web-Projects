@@ -39,7 +39,6 @@ module.exports = class middlewareCategoria {
     validar_autenticacao = (req, res, next) => {
         const  objToken = new MeuTokeJWT()
         const header = req.headers['authorization'];
-        console.log("HEader> " , header)
         if (objToken.validarToken(header) == true) {
             next();
         }else { 
@@ -60,7 +59,6 @@ module.exports = class middlewareCategoria {
         objCategoria.nomeCategoria = nomeCategoria
         const existeCategoria = await objCategoria.validar_categoria() 
         
-        console.log(existeCategoria)
         if (existeCategoria) {
             next();        
         }else { 
@@ -73,6 +71,22 @@ module.exports = class middlewareCategoria {
     };
 
 
+    async validar_Idcategoria_existente (req, res, next)  {
+        const  idCategoria  = req.params.idCategoria;
+        const objCategoria = new Categoria()
 
+        objCategoria.idCategoria = idCategoria
+        const existeCategoria = await objCategoria.validar_IDcategoria() 
+        console.log("existeCategoria" >>> + existeCategoria)
+        if (existeCategoria) {
+            next();        
+        }else { 
+            const objResposta = {
+                msg : "Esta categoria nao existe" ,
+                status : false
+            }
+            res.status(200).send(objResposta);
+        }
+    };
 
 }

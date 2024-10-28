@@ -149,13 +149,8 @@
             messageCreate.textContent = text
             messageCreate.style.display = "block";
             
-        }else  if (json.status == false && json.cod == 1){
-            let text = "Este email ja esta cadastrado!"
-            messageCreate.textContent = text
-            messageCreate.style.display = "block"; 
-
         }else  if (json.status == false ){
-            let text = "Falha ao cadastrar!"
+            let text = json.msg
             messageCreate.textContent = text
             messageCreate.style.display = "block"; 
         

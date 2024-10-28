@@ -31,11 +31,14 @@ module.exports = class RouterOpcao {
             this._middleOpcao.validar_localizacaoOpcao,
             this._middleOpcao.validar_categoria_descricao,
         
+            this._middleOpcao.validar_Idopcao,
+
             this._controleOpcao.controle_opcao_update
         )
 
         this._router.delete ('/:idOpcao' ,
             this._middleOpcao.validar_autenticacao,
+            this._middleOpcao.validar_Idopcao,
 
             this._controleOpcao.controle_opcao_delete
         )

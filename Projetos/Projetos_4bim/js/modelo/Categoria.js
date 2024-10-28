@@ -96,6 +96,19 @@ module.exports  = class Categoria  {
         }
     }
 
+
+    async validar_IDcategoria () { 
+        const conexao = Banco.getConexao()
+        const sql = "select count(*) as qtd from categoria where idCategoria = ? ";
+        try {
+            const [result] = await conexao.promise().execute  (sql, [this.idCategoria])
+            console.log(result)
+            return result[0].qtd > 0;
+        }catch (error) {
+            console.log("Errro >>>" , error)
+            return false        
+        }
+    }
     get idCategoria() {
         return this._idCategoria;
     }
