@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro JSON</title>
+    <link rel="stylesheet" type="text/css" href="../css/cadastrocsv.css" media="screen" />
+
+</head>
+
+<body>
+    <div id="divResposta">
+        <h1>Cadastro de usuarios através de arquivo JSON</h1>
+        <div class="input_container" enctype="multipart/form-data">
+            <input type="file" id="txtArquivo" accept=".json" placeholder="Arquivo" name="variavelArquivo">
+        </div>
+        <div class="col-md-12 select">
+
+        </div>
+
+        <button id="bntCadastrar">Cadastrar</button>
+
+        <div id="error-messageUsuarioCreateJSON" style="display: none;"></div>
+
+        <div class="register">
+            <p>Deseja cadastrar de outra forma ? <a href="cadastro.html">Clique aqui</a></p>
+        </div>
+    </div>
+</body>
+
+
+<script>
+
+    const divResposta = document.getElementById("divResposta")
+    const txtArquivo = document.getElementById("txtArquivo");
+
+    const bntCadastrar = document.getElementById("bntCadastrar");
+    const messageCreateJSON = document.getElementById("error-messageUsuarioCreateJSON")
+
+    bntCadastrar.onclick = function () {
+        cadastrarJSON();
+    }
+
+    async function cadastrarJSON() {
+        let arquivo = txtArquivo.files[0];
+
+        if (!arquivo ) {
+            messageCreateJSON.className = ""; // isso vai remover todas as classes/"cor" para nao sobrepor
+            messageCreateJSON.textContent = "Selecione um arquivo JSON."
+            messageCreateJSON.classList.add('text-danger')
+            messageCreateJSON.style.display = "block";
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('variavelArquivo', arquivo); 
+
+        
+
+        let uri = '/usuarios/json';
+
+        fetch(uri, {
+            method: "POST",
+    
+            body: formData
+            }).then((response) => {
+                return response.json();
+            }).then((json) => {
+                processarResultados(json);
+            }).catch((error) => {
+                console.error("Error:", error);
+            });
+        }
+
+     
+        function processarResultados(texto_json) {
+            console.log("texto_json>>> "  + texto_json)
+            if (texto_json.status == false && texto_json.codigo == 1) {
+                let text = texto_json.msg;
+                messageCreateJSON.className = ""; // isso vai remover todas as classes/"cor" para nao sobrepor
+                messageCreateJSON.textContent = text
+                messageCreateJSON.classList.add('text-danger')
+                messageCreateJSON.style.display = "block";
+
+            }else if (texto_json.status == true && texto_json.codigo == 2) {
+                let text = texto_json.msg;
+                messageCreateJSON.className = "";// isso vai remover todas as classes/"cor" para nao sobrepor
+                messageCreateJSON.textContent = text
+                messageCreateJSON.classList.add('text-warning')
+                messageCreateJSON.style.display = "block";
+
+            } else if (texto_json.status == true && texto_json.codigo == 3) { 
+                window.location.href = 'login.html'
+            }
+            bntCadastrar.textContent = 'Feito'
+            setTimeout(() => {
+                bntCadastrar.textContent = "Cadastrar"; 
+            }, 2000); // 2000 milissegundos = 2 segundos
+
+        }
+
+</script>
+
+</html>

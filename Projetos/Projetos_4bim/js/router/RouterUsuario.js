@@ -2,6 +2,9 @@ const express = require('express');
 const controlUsuario = require("../controle/usuario/controlUsuario")
 
 const MiddlewareUsuario = require("../middleware/middlewareUsuario")
+
+
+
 module.exports = class RouterUsuario {
 
     constructor () { 
@@ -23,6 +26,20 @@ module.exports = class RouterUsuario {
             this._controleUsuario.controle_usuario_post
         )
         
+
+        this._router.post ('/json' ,
+            this._middleUsuario.uploadJSON,               // Middleware para fazer upload e ler o JSON
+            this._middleUsuario.validar_nome,
+            this._middleUsuario.validar_email,
+            this._middleUsuario.validar_senha,
+            this._middleUsuario.validar_idade,
+            this._middleUsuario.validar_dataDate,
+
+            this._controleUsuario.controle_usuario_post_json
+        )
+
+        
+
         this._router.post ('/login' ,
             this._middleUsuario.validar_email,
             this._middleUsuario.validar_senha,

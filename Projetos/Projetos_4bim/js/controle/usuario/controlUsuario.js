@@ -31,6 +31,73 @@ module.exports = class ControlUsuario {
         response.status(200).send(objResposta);
     }
 
+    async  controle_usuario_post_json(request, response) {
+        const objResposta = {
+            codigo: 0,
+            status: false,
+            msg: '',
+            usuariosDuplicados: [],
+            totalUsuarios: 0
+        };
+    
+        try {
+            const usuarios = request.body.usuarios; // Assumindo que o JSON vem no formato: { "usuarios": [ ... ] }
+            let qtdUsuariosCadastrados = 0;
+            let qtdUsuariosDuplicados = 0;
+            const usuariosDuplicados = [];
+    
+            // Processa cada usuário do arquivo JSON
+            for (let usuarioData of usuarios) {
+                const usuario = new Usuario();
+                usuario.nomeUsuario = usuarioData.nomeUsuario;
+                usuario.emailUsuario = usuarioData.emailUsuario;
+                usuario.senhaUsuario = usuarioData.senhaUsuario;
+                usuario.idade = usuarioData.idade;
+                usuario.dataDate = usuarioData.dataDate;
+                usuario.categoria_idCategoria = usuarioData.categoria_idCategoria;
+    
+                // Verifica se o e-mail já está cadastrado
+                const isEmailDuplicado = await usuario.verificarEmail();
+    
+                if (!isEmailDuplicado) {
+                    const isCadastrado = await usuario.cadastrar();
+                    if (isCadastrado) {
+                        qtdUsuariosCadastrados++;
+                    }
+                } else {
+                    qtdUsuariosDuplicados++;
+                    usuariosDuplicados.push(usuario.emailUsuario);
+                }
+            }
+    
+            // Determina a mensagem final com base nos resultados
+            if (qtdUsuariosCadastrados === 0 && qtdUsuariosDuplicados > 0) {
+                objResposta.codigo = 1;
+                objResposta.status = false;
+                objResposta.msg = `Nenhum cadastro feito. Os seguintes usuários já estão cadastrados: ${usuariosDuplicados.join(", ")}`;
+            } else if (qtdUsuariosCadastrados > 0 && qtdUsuariosDuplicados > 0) {
+                objResposta.codigo = 2;
+                objResposta.status = true;
+                objResposta.msg = `Alguns usuários foram cadastrados. No entanto, os seguintes usuários já estão cadastrados: ${usuariosDuplicados.join(", ")}`;
+            } else if (qtdUsuariosCadastrados > 0 && qtdUsuariosDuplicados === 0) {
+                objResposta.codigo = 3;
+                objResposta.status = true;
+                objResposta.msg = "Todos os usuários foram cadastrados com sucesso";
+                objResposta.totalUsuarios = qtdUsuariosCadastrados;
+            }
+    
+            objResposta.usuariosDuplicados = usuariosDuplicados;
+    
+            response.status(200).json(objResposta);
+        } catch (error) {
+            objResposta.codigo = 1;
+            objResposta.status = false;
+            objResposta.erro = error.message;
+            response.status(500).json(objResposta);
+        }
+    }
+    
+
 
     async controle_usuario_update (request , response ) { 
         const emailUsuario = request.body.emailUsuario

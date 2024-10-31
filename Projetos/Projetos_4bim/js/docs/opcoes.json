@@ -1,0 +1,22 @@
+{
+    "usuarios": [
+      {
+        "idUsuario": 1,
+        "nomeUsuario": "João Silva",
+        "emailUsuario": "joao.silva@example.com",
+        "senhaUsuario": "senha123",
+       "idade" : 122,
+        "dataDate": "11/02/2025",
+        "categoria_idCategoria" :1
+          },
+      {
+        "idUsuario": 2,
+        "nomeUsuario": "Maria Oliveira",
+        "emailUsuario": "maria.oliveira@example.com",
+        "senhaUsuario": "senha456",
+        "idade" : 122,
+        "dataDate": "11/02/2025",
+        "categoria_idCategoria" :1
+      }
+    ]
+  }
