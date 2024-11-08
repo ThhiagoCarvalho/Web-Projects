@@ -116,6 +116,25 @@ public bool IsCategoria(string nomecategoria) {
     return existe; 
 }
 
+
+public bool ExisteCategoria(uint IdCategoria) { 
+    bool existe = false;
+    try {
+        MySqlCommand mysqlCommand = new MySqlCommand("SELECT COUNT(*) as qtd FROM categoria WHERE idCategoria = @idCategoria", Banco.GetConnection());
+        mysqlCommand.Parameters.AddWithValue("@idCategoria", IdCategoria);
+
+        object resultado = mysqlCommand.ExecuteScalar();
+        if (resultado != null) {
+            int qtd = Convert.ToInt32(resultado);
+            existe = qtd > 0;
+        }
+    } catch (Exception ex) {
+        Console.WriteLine("Erro ao verificar categoria: " + ex.Message);
+    }
+    return existe; 
+}
+
+
     }
 
 }

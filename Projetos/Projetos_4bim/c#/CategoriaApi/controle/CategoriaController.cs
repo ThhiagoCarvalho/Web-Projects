@@ -87,12 +87,18 @@ namespace CategoriaApi.Control
         {
             try
             {
+               
+
                 CategoriaMiddleware categoriaMiddleware = new CategoriaMiddleware();
                 categoriaMiddleware.ValidarNomeCategoria(jsonData);
+                
 
                 Dictionary<string, object> categoriaData = jsonData["categoria"];
                 string nomeCategoria = categoriaData["nomeCategoria"].ToString();
                 categoriaMiddleware.IsNotCategoria(nomeCategoria);
+                if  (categoriaMiddleware.ExisteCategoriaId(idCategoria) == false )  {
+                     return StatusCode(404, new { mensagem = "Categoria não encontrada." });
+                }
 
                 Categoria categoria = new Categoria
                 {
@@ -132,6 +138,11 @@ namespace CategoriaApi.Control
         [HttpDelete("/categorias/{idCategoria}")]
         public IActionResult Delete_Categoria(uint idCategoria)
         {
+            CategoriaMiddleware categoriaMiddleware = new CategoriaMiddleware();
+            if  (categoriaMiddleware.ExisteCategoriaId(idCategoria) == false )  {
+                return StatusCode(404, new { mensagem = "Categoria não encontrada." });
+            }
+
             Categoria objcategoria = new Categoria();
             objcategoria.IdCategoria = idCategoria;
 

@@ -54,4 +54,23 @@ public class CategoriaMiddleware
         // Retorna true se não houver um cargo com o nome informado
         return true;
     }
+
+
+        public bool ExisteCategoriaId(uint idCategoria)
+    {
+        // Cria uma nova instância de Cargo para realizar a verificação
+        Categoria categoria = new Categoria();
+
+        // Chama o método IsCargoByNomeCargo para verificar se o cargo já existe
+        if (categoria.ExisteCategoria(idCategoria) == false)
+        {
+            // Lança uma exceção se o nome do cargo já estiver registrado
+             return false;
+        }else { 
+
+        // Retorna true se não houver um cargo com o nome informado
+        return true;
+        }
+        
+    }
 }
